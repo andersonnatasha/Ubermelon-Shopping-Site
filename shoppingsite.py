@@ -60,6 +60,32 @@ def show_melon(melon_id):
 def show_shopping_cart():
     """Display content of shopping cart."""
 
+    shopping_cart = session["cart"]
+    melon_objects = []
+    total_cost_of_cart = float(0)
+
+    for melon_id, qty in shopping_cart.items(): # water_id, 5
+        each_melon_total = 0
+
+        cart_each_melon = melons.get_by_id(melon_id) #[water_id,melon-type, watermelon, 3, url, green, False ]
+
+        each_melon_total =  qty * cart_each_melon.price #15
+        total_cost_of_cart += each_melon_total
+
+        cart_each_melon.price = "${:.2f}".format(cart_each_melon.price)
+
+        #"${:.2f}".format(self.price)
+
+        cart_each_melon.quantity = qty
+        cart_each_melon.total_cost = "${:.2f}".format(each_melon_total)
+
+
+
+        melon_objects.append(cart_each_melon)
+
+    return render_template("cart.html",
+                            melon_in_cart = melon_objects,
+                            cart_price = total_cost_of_cart)
     # TODO: Display the contents of the shopping cart.
 
     # The logic here will be something like:
@@ -78,7 +104,7 @@ def show_shopping_cart():
     # Make sure your function can also handle the case wherein no cart has
     # been added to the session
 
-    return render_template("cart.html")
+
 
 
 @app.route("/add_to_cart/<melon_id>")
@@ -95,10 +121,10 @@ def add_to_cart(melon_id):
         session["cart"] =  {}
         shopping_cart  = session["cart"]
     else:
-        shopping_cart = session["cart"] # cart = {"Watermelon":4, "Casabba":2}
+        shopping_cart = session["cart"]
 
     shopping_cart[melon_id] = shopping_cart.get(melon_id, 0) + 1
-    # session["cart"] = shopping_cart
+
     flash("Melon successfully added!")
     return redirect('/cart')
 
