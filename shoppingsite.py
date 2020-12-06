@@ -79,8 +79,6 @@ def show_shopping_cart():
         cart_each_melon.quantity = qty
         cart_each_melon.total_cost = "${:.2f}".format(each_melon_total)
 
-
-
         melon_objects.append(cart_each_melon)
 
     return render_template("cart.html",
